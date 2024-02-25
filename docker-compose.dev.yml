@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  reverse-proxy:
+    image: nginx:latest
+    container_name: nginx_container
+    ports:
+      - 9000:9000
+    depends_on:
+      - postgres
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+  redis:
+    image: redis:latest
+    container_name: my_redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./redis_data:/data
+
+  postgres:
+    image: postgres:14
+    env_file:
+      - ./apps/api/.env
+    environment:
+      POSTGRES_DB: nodemap-db
+      POSTGRES_USER: nodemap-user
+      POSTGRES_PASSWORD: nodemap-password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  db_data:
