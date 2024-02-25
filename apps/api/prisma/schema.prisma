@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                        Int       @id @default(autoincrement())
+  email                     String    @unique
+  firstName                 String
+  lastName                  String
+  passwordHash              String
+  currentHashedRefreshToken String?
+  roadmaps                  Roadmap[]
+
+  @@map("users")
+}
+
+model Roadmap {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  userId      Int
+  user        User    @relation(fields: [userId], references: [id])
+  nodes       Node[]
+}
+
+model Node {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String?
+  roadmapId Int
+  roadmap   Roadmap @relation(fields: [roadmapId], references: [id])
+  status    Status
+  parentId  Int?
+  parent    Node?   @relation("NodeChildren", fields: [parentId], references: [id])
+  children  Node[]  @relation("NodeChildren")
+}
+
+enum Status {
+  PENDING
+  DONE
+  IN_PROGRESS
+  SKIP
+}
