@@ -12,7 +12,6 @@ import { UserModule } from './user/user.module';
 import { LoggingHttpModule } from './core/http.logging-module';
 import { DatabaseModule } from './database/database.module';
 import { JwtModule } from '@nestjs/jwt';
-import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -28,7 +27,6 @@ import { PostsModule } from './posts/posts.module';
     LoggingHttpModule,
     DatabaseModule,
     JwtModule,
-    PostsModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],
