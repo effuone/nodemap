@@ -11,7 +11,6 @@ type LoginData = {
 type UserData = {
   id: number;
   email: string;
-  userId: number;
 };
 
 export type { RegistrationData, LoginData, UserData };
