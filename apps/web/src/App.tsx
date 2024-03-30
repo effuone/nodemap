@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import ReactFlow, { Position } from 'reactflow';
 import 'reactflow/dist/style.css';
-import CustomNode from './components/customNode';
 import { applyCommonProperties, constructEdges } from './lib/utils';
+import MainNode from './components/mainNode';
 
 const initialNodes = [
   {
@@ -166,7 +166,7 @@ const initialNodes = [
 ];
 
 function App() {
-  const newNode = useMemo(() => ({ customNode: CustomNode }), []);
+  const newNode = useMemo(() => ({ mainNode: MainNode }), []);
   return (
     <>
       <div style={{ width: '100vw', height: '100vh' }}>
@@ -182,3 +182,13 @@ function App() {
 }
 
 export default App;
+
+//child node 
+// const nodeTypes = {
+//   "main": {
+//     "mainNode": MainNode
+//   },
+//   "child": {
+//     "childNode": ChildNode
+//   }
+// }

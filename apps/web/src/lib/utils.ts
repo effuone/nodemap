@@ -20,7 +20,7 @@ export const applyStyles = (nodes: any) => {
 export const applyCommonProperties = (initialNodes: any) => {
   let i = 1;
   initialNodes.forEach((node: any) => {
-    node.type = 'customNode';
+    node.type = 'mainNode';
     node.id = `${i}`;
     i++;
   });
