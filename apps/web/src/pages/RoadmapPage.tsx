@@ -1,232 +1,131 @@
-import MainNode from "@/components/mainNode";
-import MainPathEdge from "@/components/mainPathEdge";
-import { Button } from "@/components/ui/button";
-import Layout from "@/layout/layout";
-import { applyCommonProperties, constructMainPathEdges } from "@/lib/utils";
-import { useEffect, useMemo, useState } from "react";
-import ReactFlow, { Position } from "reactflow";
-import "reactflow/dist/style.css";
+import MainNode from '@/components/mainNode';
+import MainPathEdge from '@/components/mainPathEdge';
+import { Button } from '@/components/ui/button';
+import Layout from '@/layout/layout';
+import { applyCommonProperties, constructMainPathEdges } from '@/lib/utils';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import ReactFlow, {
+  Controls,
+  Node,
+  Position,
+  addEdge,
+  useEdgesState,
+  useNodesState,
+} from 'reactflow';
+import 'reactflow/dist/style.css';
+import { io } from 'socket.io-client';
 
-const edgeTypes = {
-  mainPathEdge: MainPathEdge,
+type GPTNode = {
+  title?: string;
+  details?: string[];
 };
-
-const initialNodes = [
-  {
-    position: { x: 0, y: 0 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    data: { label: "Internet" },
-  },
-  {
-    position: { x: 200, y: 0 },
-    data: { label: "Html" },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 400, y: 0 },
-    data: {
-      label: "Css",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 600, y: 0 },
-    data: {
-      label: "JavaScript",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 800, y: 0 },
-    data: {
-      label: "Version Control Systems",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 1000, y: 0 },
-    data: {
-      label: "Package Managers",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 1200, y: 0 },
-    data: {
-      label: "Pick a framework",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 1400, y: 0 },
-    data: { label: "Writing CSS" },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 1400, y: 100 },
-    data: {
-      label: "CSS Architecture",
-    },
-    sourcePosition: Position.Left,
-    targetPosition: Position.Right,
-  },
-  {
-    position: { x: 1200, y: 100 },
-    data: { label: "CSS Prepocessors" },
-    sourcePosition: Position.Left,
-    targetPosition: Position.Right,
-  },
-  {
-    position: { x: 1000, y: 100 },
-    data: { label: "Build Tools" },
-    sourcePosition: Position.Left,
-    targetPosition: Position.Right,
-  },
-  {
-    position: { x: 800, y: 100 },
-    data: { label: "Testing Your apps" },
-    sourcePosition: Position.Left,
-    targetPosition: Position.Right,
-  },
-  {
-    position: { x: 600, y: 100 },
-    data: {
-      label: "Authentication strategies",
-    },
-    sourcePosition: Position.Left,
-    targetPosition: Position.Right,
-  },
-  {
-    position: { x: 400, y: 100 },
-    data: {
-      label: "Web Security Basics",
-    },
-    sourcePosition: Position.Left,
-    targetPosition: Position.Right,
-  },
-  {
-    position: { x: 200, y: 100 },
-    data: { label: "Web Components" },
-    sourcePosition: Position.Left,
-    targetPosition: Position.Right,
-  },
-  {
-    position: { x: 0, y: 100 },
-    data: { label: "Type Checkers" },
-    sourcePosition: Position.Left,
-    targetPosition: Position.Right,
-  },
-  {
-    position: { x: 0, y: 200 },
-    data: {
-      label: "Server Sring(SSR)",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 200, y: 200 },
-    data: { label: "GraphQL" },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 400, y: 200 },
-    data: {
-      label: "Static Site Generators",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 600, y: 200 },
-    data: {
-      label: "Progressive Web Apps",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-  {
-    position: { x: 800, y: 200 },
-    data: {
-      label: "Mobile Applications",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
-];
-
-export const parentNode: NodeType = {
-  data: {
-    label: "Web App",
-  },
-};
-
-type NodeType = {
-  index?: number,
-  data: {
-    label: string,
-  },
-  position?: {
-    x: number,
-    y: number,
-  },
-  sourcePosition?: Position
-  targetPosition?: Position
-}
 
 const RoadmapPage = () => {
-  const newNode = useMemo(() => ({ mainNode: MainNode }), []);
+  const nodeType = useMemo(() => ({ mainNode: MainNode }), []);
+  const edgeTypes = useMemo(
+    () => ({
+      mainPathEdge: MainPathEdge,
+    }),
+    []
+  );
 
-  const [nodeList, setNodeList] = useState<NodeType[]>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(
+    applyCommonProperties([
+      {
+        position: { x: 0, y: 0 },
+        sourcePosition: Position.Bottom,
+        targetPosition: Position.Top,
+        data: { label: 'Internet' },
+      },
+      {
+        position: { x: 0, y: 200 },
+        sourcePosition: Position.Bottom,
+        targetPosition: Position.Top,
+        data: { label: 'Internet' },
+      },
+    ])
+  );
 
-  const addParentNode = (parentNode: NodeType) => {
-    setNodeList(prevNodeList => {
-      const lastIndex = prevNodeList.length > 0 ? prevNodeList[prevNodeList.length - 1].index : -1;
-      const lastYPosition = prevNodeList.length > 0 ? prevNodeList[prevNodeList.length - 1].position?.y : 0;
-      
-      const newNode = {
-        ...parentNode,
-        index: lastIndex as number + 1,
-        position: { x: 0, y: lastYPosition as number + 200 },
-        sourcePosition: Position.Top,
-        targetPosition: Position.Bottom,
+  const [newNode, setNewNode] = useState<GPTNode>();
+
+  const [edges, setEdges, onEdgesChange] = useEdgesState(
+    constructMainPathEdges(nodes)
+  );
+
+  const userPrompt = 'Create a roadmap for becoming full-stack engineer';
+
+  useEffect(() => {
+    if (!newNode) return;
+
+    setNodes((currentNodes: any) => {
+      const lastNode = currentNodes[currentNodes.length - 1];
+      const lastNodeYPosition = lastNode ? lastNode.position.y : 0;
+      const lastNodeIndex = lastNode ? (lastNode.id as number) + 1 : 1;
+
+      const newNodeObject: Node = {
+        id: `${lastNodeIndex}`,
+        type: 'mainNode',
+        position: { x: lastNode.position.x, y: lastNodeYPosition + 100 },
+        data: {
+          label: newNode.title,
+        },
+        sourcePosition: lastNode.sourcePosition,
+        targetPosition: lastNode.targetPosition,
       };
-  
-      return [...prevNodeList, newNode];
+
+      setEdges(constructMainPathEdges(nodes));
+
+      return [...currentNodes, newNodeObject];
+    });
+  }, [newNode]);
+
+  const startStreaming = () => {
+    const socket = io('http://localhost:7070');
+
+    socket.on('connect', () => {
+      console.log('Socket connected');
+      socket.emit('createRoadmap', userPrompt);
+    });
+
+    socket.on('streamData', (data: GPTNode) => {
+      setNewNode(data);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Socket disconnected');
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Connection error:', error);
     });
   };
 
-  useEffect(() => {
-    console.log(nodeList)
-  }, [nodeList])
+  const onConnect = useCallback(
+    (connection: any) => setEdges((eds) => addEdge(connection, eds)),
+    [setEdges]
+  );
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div style={{ width: '100vw', height: '100vh' }}>
       <Layout>
         <Button
-          onClick={() => {
-            addParentNode(parentNode);
-          }}
+          onClick={startStreaming}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          {" "}
-          add Parent element
+          Start Streaming
         </Button>
         <ReactFlow
-          nodeTypes={newNode}
+          nodeTypes={nodeType}
           fitView
           edgeTypes={edgeTypes}
-          nodes={applyCommonProperties(nodeList)}
-          edges={constructMainPathEdges(initialNodes)}
-        ></ReactFlow>
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+        >
+          <Controls />
+        </ReactFlow>
       </Layout>
     </div>
   );

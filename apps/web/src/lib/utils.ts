@@ -32,7 +32,6 @@ export const constructMainPathEdges = (initialNodes: any[]) => {
   if (initialNodes.length === 0) return [];
   const edges = [];
   for (let i = 1; i < initialNodes.length; i++) {
-    if (i === 0) continue;
     edges.push({
       id: `el${i}-${i + 1}`,
       type: 'mainPathEdge',
