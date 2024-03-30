@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import ReactFlow, { Position } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { applyCommonProperties, constructMainPathEdges } from './lib/utils';
