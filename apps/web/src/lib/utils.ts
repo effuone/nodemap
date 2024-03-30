@@ -17,7 +17,8 @@ export const applyStyles = (nodes: any) => {
   return nodes;
 };
 
-export const applyCommonProperties = (initialNodes: any) => {
+export const applyCommonProperties = (initialNodes: any[]) => {
+  if (initialNodes.length === 0) return [];
   let i = 1;
   initialNodes.forEach((node: any) => {
     node.type = 'mainNode';
@@ -27,12 +28,14 @@ export const applyCommonProperties = (initialNodes: any) => {
   return initialNodes;
 };
 
-export const constructEdges = (initialNodes: any) => {
+export const constructMainPathEdges = (initialNodes: any[]) => {
+  if (initialNodes.length === 0) return [];
   const edges = [];
   for (let i = 1; i < initialNodes.length; i++) {
     if (i === 0) continue;
     edges.push({
       id: `el${i}-${i + 1}`,
+      type: 'mainPathEdge',
       source: `${i}`,
       target: `${i + 1}`,
     });

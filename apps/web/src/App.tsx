@@ -1,8 +1,13 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import ReactFlow, { Position } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { applyCommonProperties, constructEdges } from './lib/utils';
+import { applyCommonProperties, constructMainPathEdges } from './lib/utils';
+import MainPathEdge from './components/mainPathEdge';
 import MainNode from './components/mainNode';
+
+const edgeTypes = {
+  mainPathEdge: MainPathEdge,
+};
 
 const initialNodes = [
   {
@@ -173,8 +178,9 @@ function App() {
         <ReactFlow
           nodeTypes={newNode}
           fitView
+          edgeTypes={edgeTypes}
           nodes={applyCommonProperties(initialNodes)}
-          edges={constructEdges(initialNodes)}
+          edges={constructMainPathEdges(initialNodes)}
         ></ReactFlow>
       </div>
     </>
@@ -182,13 +188,3 @@ function App() {
 }
 
 export default App;
-
-//child node 
-// const nodeTypes = {
-//   "main": {
-//     "mainNode": MainNode
-//   },
-//   "child": {
-//     "childNode": ChildNode
-//   }
-// }
