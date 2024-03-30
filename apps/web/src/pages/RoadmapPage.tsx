@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
-import ReactFlow, { Position } from 'reactflow';
-import 'reactflow/dist/style.css';
-import { applyCommonProperties, constructMainPathEdges } from './lib/utils';
-import MainPathEdge from './components/mainPathEdge';
-import MainNode from './components/mainNode';
-import Layout from "./layout/layout";
+import MainNode from "@/components/mainNode";
+import MainPathEdge from "@/components/mainPathEdge";
+import Layout from "@/layout/layout";
+import { applyCommonProperties, constructMainPathEdges } from "@/lib/utils";
+import { useMemo } from "react";
+import ReactFlow, { Position } from "reactflow";
+import "reactflow/dist/style.css";
 
 const edgeTypes = {
   mainPathEdge: MainPathEdge,
@@ -171,23 +171,20 @@ const initialNodes = [
   },
 ];
 
-function App() {
+const RoadmapPage = () => {
   const newNode = useMemo(() => ({ mainNode: MainNode }), []);
   return (
-    <>
-      <div style={{ width: "100vw", height: "100vh" }}>
-        <Layout>
-          <ReactFlow
-            nodeTypes={newNode}
-            fitView
+    <div style={{ width: "100vw", height: "100vh" }}>
+      <Layout>
+        <ReactFlow
+          nodeTypes={newNode}
+          fitView
           edgeTypes={edgeTypes}
-            nodes={applyCommonProperties(initialNodes)}
-            edges={constructMainPathEdges(initialNodes)}
-          ></ReactFlow>
-        </Layout>
-      </div>
-    </>
+          nodes={applyCommonProperties(initialNodes)}
+          edges={constructMainPathEdges(initialNodes)}
+        ></ReactFlow>
+      </Layout>
+    </div>
   );
-}
-
-export default App;
+};
+export default RoadmapPage;
