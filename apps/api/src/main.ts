@@ -30,8 +30,8 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   const config = new DocumentBuilder()
-    .setTitle('Jaqsylyq backend API boilerplate by @alibackend')
-    .setDescription('Api Docs for Jaqsylyq backend API')
+    .setTitle('Burning Heroes Hackathon backend API boilerplate by @alibackend')
+    .setDescription('Api Docs for Nodemap backend API')
     .setVersion('1.0')
     .build();
 
