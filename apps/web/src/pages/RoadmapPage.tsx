@@ -1,8 +1,9 @@
 import MainNode from "@/components/mainNode";
 import MainPathEdge from "@/components/mainPathEdge";
+import { Button } from "@/components/ui/button";
 import Layout from "@/layout/layout";
 import { applyCommonProperties, constructMainPathEdges } from "@/lib/utils";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ReactFlow, { Position } from "reactflow";
 import "reactflow/dist/style.css";
 
@@ -161,26 +162,69 @@ const initialNodes = [
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
   },
-  {
-    position: { x: 1000, y: 200 },
-    data: {
-      label: "Desktop Applications",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
 ];
+
+export const parentNode: NodeType = {
+  data: {
+    label: "Web App",
+  },
+};
+
+type NodeType = {
+  index?: number,
+  data: {
+    label: string,
+  },
+  position?: {
+    x: number,
+    y: number,
+  },
+  sourcePosition?: Position
+  targetPosition?: Position
+}
 
 const RoadmapPage = () => {
   const newNode = useMemo(() => ({ mainNode: MainNode }), []);
+
+  const [nodeList, setNodeList] = useState<NodeType[]>([]);
+
+  const addParentNode = (parentNode: NodeType) => {
+    setNodeList(prevNodeList => {
+      const lastIndex = prevNodeList.length > 0 ? prevNodeList[prevNodeList.length - 1].index : -1;
+      const lastYPosition = prevNodeList.length > 0 ? prevNodeList[prevNodeList.length - 1].position?.y : 0;
+      
+      const newNode = {
+        ...parentNode,
+        index: lastIndex as number + 1,
+        position: { x: 0, y: lastYPosition as number + 200 },
+        sourcePosition: Position.Top,
+        targetPosition: Position.Bottom,
+      };
+  
+      return [...prevNodeList, newNode];
+    });
+  };
+
+  useEffect(() => {
+    console.log(nodeList)
+  }, [nodeList])
+
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <Layout>
+        <Button
+          onClick={() => {
+            addParentNode(parentNode);
+          }}
+        >
+          {" "}
+          add Parent element
+        </Button>
         <ReactFlow
           nodeTypes={newNode}
           fitView
           edgeTypes={edgeTypes}
-          nodes={applyCommonProperties(initialNodes)}
+          nodes={applyCommonProperties(nodeList)}
           edges={constructMainPathEdges(initialNodes)}
         ></ReactFlow>
       </Layout>
