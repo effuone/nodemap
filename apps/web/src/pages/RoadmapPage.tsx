@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react';
+import MainNode from '@/components/mainNode';
+import MainPathEdge from '@/components/mainPathEdge';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { applyCommonProperties, constructMainPathEdges } from '@/lib/utils';
+import { useMemo } from 'react';
 import ReactFlow, { Position } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { applyCommonProperties, constructMainPathEdges } from './lib/utils';
-import MainPathEdge from './components/mainPathEdge';
-import MainNode from './components/mainNode';
 
 const edgeTypes = {
   mainPathEdge: MainPathEdge,
@@ -170,21 +172,20 @@ const initialNodes = [
   },
 ];
 
-function App() {
+const RoadmapPage = () => {
+  const { logout } = useAuth();
   const newNode = useMemo(() => ({ mainNode: MainNode }), []);
   return (
-    <>
-      <div style={{ width: '100vw', height: '100vh' }}>
-        <ReactFlow
-          nodeTypes={newNode}
-          fitView
-          edgeTypes={edgeTypes}
-          nodes={applyCommonProperties(initialNodes)}
-          edges={constructMainPathEdges(initialNodes)}
-        ></ReactFlow>
-      </div>
-    </>
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <Button onClick={logout}>Logout</Button>
+      <ReactFlow
+        nodeTypes={newNode}
+        fitView
+        edgeTypes={edgeTypes}
+        nodes={applyCommonProperties(initialNodes)}
+        edges={constructMainPathEdges(initialNodes)}
+      ></ReactFlow>
+    </div>
   );
-}
-
-export default App;
+};
+export default RoadmapPage;

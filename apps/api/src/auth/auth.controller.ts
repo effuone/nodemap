@@ -18,7 +18,6 @@ import { Public } from './guards/public.decorator';
 import { UserService } from 'src/user/user.service';
 import { RequestWithUser } from 'src/core/http.interface';
 import { JwtRefreshTokenAuthGuard } from './guards/jwt-refresh-token-auth.guard';
-import { User } from '@prisma/client';
 
 @ApiBearerAuth()
 @ApiTags('Auth')
@@ -50,8 +49,6 @@ export class AuthController {
 
       return {
         id: newUser.id,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
         email: newUser.email,
       };
     } catch (error: any) {
@@ -99,7 +96,10 @@ export class AuthController {
     const { user } = req;
     const accessToken = this.authService.generateAccessToken(user);
     this.authService.setAccessTokenCookie(req.res, accessToken);
-    return user;
+    return {
+      id: user.id,
+      email: user.email,
+    };
   }
 
   @UseGuards(JwtRefreshTokenAuthGuard)
@@ -114,8 +114,6 @@ export class AuthController {
     return {
       id: req.user.id,
       email: req.user.email,
-      firstName: req.user.firstName,
-      lastName: req.user.lastName,
     };
   }
 }
