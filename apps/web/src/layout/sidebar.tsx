@@ -2,12 +2,9 @@ import { useEffect, useRef, useState } from "react";
 
 // Import necessary libraries and components
 
-// Define the Sidenav component
 export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
-  // Define state for sidebar expansion
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
-  // Create a reference to the sidebar element
   const sidebar = useRef(null);
 
   // Effect to add or remove a class to the body element based on sidebar expansion
