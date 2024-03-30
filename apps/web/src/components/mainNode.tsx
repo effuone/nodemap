@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import { Handle, NodeProps, Position } from 'reactflow';
 
-interface CustomNodeProps extends NodeProps {
+interface MainNodeProps extends NodeProps {
   data: {
     label: string;
   };
 }
 
-const CustomNode: FC<CustomNodeProps> = ({
+const MainNode: FC<MainNodeProps> = ({
   data,
   sourcePosition = Position.Left,
   targetPosition = Position.Right,
@@ -22,4 +22,4 @@ const CustomNode: FC<CustomNodeProps> = ({
   );
 };
 
-export default CustomNode;
+export default MainNode;

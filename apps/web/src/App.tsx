@@ -1,9 +1,14 @@
-import { useMemo } from "react";
-import ReactFlow, { Position } from "reactflow";
-import "reactflow/dist/style.css";
-import CustomNode from "./components/customNode";
-import { applyCommonProperties, constructEdges } from "./lib/utils";
+import { useMemo } from 'react';
+import ReactFlow, { Position } from 'reactflow';
+import 'reactflow/dist/style.css';
+import { applyCommonProperties, constructMainPathEdges } from './lib/utils';
+import MainPathEdge from './components/mainPathEdge';
+import MainNode from './components/mainNode';
 import Layout from "./layout/layout";
+
+const edgeTypes = {
+  mainPathEdge: MainPathEdge,
+};
 
 const initialNodes = [
   {
@@ -167,7 +172,7 @@ const initialNodes = [
 ];
 
 function App() {
-  const newNode = useMemo(() => ({ customNode: CustomNode }), []);
+  const newNode = useMemo(() => ({ mainNode: MainNode }), []);
   return (
     <>
       <div style={{ width: "100vw", height: "100vh" }}>
@@ -175,8 +180,9 @@ function App() {
           <ReactFlow
             nodeTypes={newNode}
             fitView
+          edgeTypes={edgeTypes}
             nodes={applyCommonProperties(initialNodes)}
-            edges={constructEdges(initialNodes)}
+            edges={constructMainPathEdges(initialNodes)}
           ></ReactFlow>
         </Layout>
       </div>
