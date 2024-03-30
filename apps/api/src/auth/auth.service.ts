@@ -56,8 +56,6 @@ export class AuthService {
       data: {
         email: registerDto.email,
         passwordHash,
-        firstName: registerDto.firstName,
-        lastName: registerDto.lastName,
       },
     });
 
@@ -81,8 +79,6 @@ export class AuthService {
     const payload: UserJwtPayload = {
       id: user.id,
       email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
     };
 
     return this.jwtService.sign(payload, {
@@ -95,8 +91,6 @@ export class AuthService {
     const payload: UserJwtPayload = {
       id: user.id,
       email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
     };
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_REFRESH_TOKEN_SECRET,
