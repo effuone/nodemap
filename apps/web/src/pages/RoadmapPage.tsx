@@ -3,9 +3,10 @@ import MainPathEdge from '@/components/mainPathEdge';
 import { Button } from '@/components/ui/button';
 import Layout from '@/layout/layout';
 import { applyCommonProperties, constructMainPathEdges } from '@/lib/utils';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
   Controls,
+  Edge,
   Node,
   Position,
   addEdge,
@@ -14,31 +15,21 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { io } from 'socket.io-client';
+import { applyEdgeChanges } from 'reactflow';
 
 type GPTNode = {
   title?: string;
   details?: string[];
 };
 
-const RoadmapPage = () => {
-  const nodeType = useMemo(() => ({ mainNode: MainNode }), []);
-  const edgeTypes = useMemo(
-    () => ({
-      mainPathEdge: MainPathEdge,
-    }),
-    []
-  );
+const nodeTypes = { mainNode: MainNode };
+const edgeTypes = { mainPathEdge: MainPathEdge };
 
+const RoadmapPage = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(
     applyCommonProperties([
       {
         position: { x: 0, y: 0 },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
-        data: { label: 'Internet' },
-      },
-      {
-        position: { x: 0, y: 200 },
         sourcePosition: Position.Bottom,
         targetPosition: Position.Top,
         data: { label: 'Internet' },
@@ -48,8 +39,13 @@ const RoadmapPage = () => {
 
   const [newNode, setNewNode] = useState<GPTNode>();
 
-  const [edges, setEdges, onEdgesChange] = useEdgesState(
-    constructMainPathEdges(nodes)
+  const [edges, setEdges] = useEdgesState(constructMainPathEdges(nodes));
+
+  const onEdgesChange = useCallback(
+    (changes: any) => {
+      setEdges((oldEdges) => applyEdgeChanges(changes, oldEdges));
+    },
+    [setEdges]
   );
 
   const userPrompt = 'Create a roadmap for becoming full-stack engineer';
@@ -60,12 +56,12 @@ const RoadmapPage = () => {
     setNodes((currentNodes: any) => {
       const lastNode = currentNodes[currentNodes.length - 1];
       const lastNodeYPosition = lastNode ? lastNode.position.y : 0;
-      const lastNodeIndex = lastNode ? (lastNode.id as number) + 1 : 1;
+      const lastNodeIndex = lastNode ? (Number(lastNode.id) as number) + 1 : 1;
 
       const newNodeObject: Node = {
         id: `${lastNodeIndex}`,
         type: 'mainNode',
-        position: { x: lastNode.position.x, y: lastNodeYPosition + 100 },
+        position: { x: lastNode.position.x, y: lastNodeYPosition + 140 },
         data: {
           label: newNode.title,
         },
@@ -73,10 +69,10 @@ const RoadmapPage = () => {
         targetPosition: lastNode.targetPosition,
       };
 
-      setEdges(constructMainPathEdges(nodes));
-
       return [...currentNodes, newNodeObject];
     });
+
+    setEdges(constructMainPathEdges(nodes));
   }, [newNode]);
 
   const startStreaming = () => {
@@ -115,7 +111,7 @@ const RoadmapPage = () => {
           Start Streaming
         </Button>
         <ReactFlow
-          nodeTypes={nodeType}
+          nodeTypes={nodeTypes}
           fitView
           edgeTypes={edgeTypes}
           nodes={nodes}
