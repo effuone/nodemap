@@ -1,10 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { cn } from '@/lib/utils';
-import { Icons } from './icons';
-import { Label } from './ui/label';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+import { cn } from "@/lib/utils";
+import { Icons } from "./icons";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
 import {
   Form,
@@ -12,15 +12,15 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useAuth } from '@/lib/hooks/useAuth';
-import useAlertMessage from '@/lib/hooks/useAlertMessage';
-import AlertMessage from './alert-message';
-import { AlertType } from './ui/alert';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useAuth } from "@/lib/hooks/useAuth";
+import useAlertMessage from "@/lib/hooks/useAlertMessage";
+import AlertMessage from "./alert-message";
+import { AlertType } from "./ui/alert";
 
 const formSchema = z.object({
   email: z.string().min(2).max(50),
@@ -29,10 +29,7 @@ const formSchema = z.object({
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export default function UserLoginForm({
-  className,
-  ...props
-}: UserLoginFormProps) {
+export default function ({ className, ...props }: UserLoginFormProps) {
   const { showAlertMessage, hideAlertMessage, alertState } = useAlertMessage();
 
   const auth = useAuth();
@@ -41,8 +38,8 @@ export default function UserLoginForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
 
@@ -55,17 +52,17 @@ export default function UserLoginForm({
     } catch (e: any) {
       if (e.response.status === 400)
         showAlertMessage(
-          'Ошибка при авторизации',
+          "Ошибка при авторизации",
           e.response.data.message,
           AlertType.ERROR,
-          2500
+          2500,
         );
       if (e.response.status === 404)
         showAlertMessage(
-          'Ошибка при авторизации',
+          "Ошибка при авторизации",
           e.response.data.message,
           AlertType.ERROR,
-          2500
+          2500,
         );
     }
     setIsLoading(true);
@@ -76,7 +73,7 @@ export default function UserLoginForm({
   }
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className={cn("grid gap-6", className)} {...props}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
@@ -145,7 +142,7 @@ export default function UserLoginForm({
           alertType={alertState.type}
           duration={alertState.duration}
           onClose={hideAlertMessage}
-          className="lg:left-3/4 top-36"
+          className="top-36 lg:left-3/4"
         />
       )}
 
