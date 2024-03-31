@@ -5,6 +5,8 @@ import Layout from "@/layout/layout";
 import { applyCommonProperties, constructMainPathEdges } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import ReactFlow, {
+  Background,
+  BackgroundVariant,
   Controls,
   Node,
   Position,
@@ -16,14 +18,16 @@ import "reactflow/dist/style.css";
 import { io } from "socket.io-client";
 import { applyEdgeChanges } from "reactflow";
 import DialogCustom from "@/components/dialog-custom";
+import ChildNode from "@/components/childNode";
+import ChildPathEdge from "@/components/childPathEdge";
 
 type GPTNode = {
   title?: string;
   details?: string[];
 };
 
-const nodeTypes = { mainNode: MainNode };
-const edgeTypes = { mainPathEdge: MainPathEdge };
+const nodeTypes = { mainNode: MainNode, childNode: ChildNode };
+const edgeTypes = { mainPathEdge: MainPathEdge, childPathEdge: ChildPathEdge };
 
 const exampleDialogProps: any = {
   title: "HTML",
@@ -156,6 +160,7 @@ const RoadmapPage = () => {
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
           >
+            <Background style={{backgroundColor: "#282828"}} color="#3E3E3E" variant={'dots' as BackgroundVariant} gap={12} size={2} /> 
             <Controls />
           </ReactFlow>
         </Layout>
