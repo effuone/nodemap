@@ -19,6 +19,7 @@ import { applyEdgeChanges } from 'reactflow';
 import ChildNode from '@/components/childNode';
 import ChildPathEdge from '@/components/childPathEdge';
 import DialogGenerate from '@/components/generate-dialog.tsx';
+import DialogCustom from "@/components/dialog-custom.tsx";
 import { BACKEND_URL } from '@/services';
 
 // Define the steps for the x position values
@@ -64,11 +65,18 @@ const RoadmapPage = () => {
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => setIsModalOpen(false);
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const handleDialogClose = () => setIsDialogOpen(false);
+    const handleDialogOpen = () => setIsDialogOpen(true);
+
   const [newNode, setNewNode] = useState<GPTNode>();
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
 
   const [edges, setEdges] = useEdgesState([]);
+
+  const [clickedNode, setClickedNode] = useState(null);
+
 
   const addNode = (newNode: Node) => {
     setNodes((oldNodes) => [...oldNodes, newNode]);
@@ -221,6 +229,11 @@ const RoadmapPage = () => {
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
+            onNodeClick={(event, node) => {
+              console.log(node);
+              setClickedNode(node);
+              handleDialogOpen();
+            }}
           >
             <Background
               style={{ backgroundColor: '#282828' }}
@@ -247,6 +260,10 @@ const RoadmapPage = () => {
         inputValue={userPrompt}
         onInputChange={handleInputChange}
         onSubmit={startStreaming}
+      />
+      <DialogCustom
+          isOpen={isDialogOpen} onClose={handleDialogClose}
+          title={clickedNode ? clickedNode.data.label : 'Node Information'}
       />
     </>
   );
