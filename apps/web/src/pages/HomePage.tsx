@@ -66,12 +66,12 @@ export default function HomePage() {
             </span>{" "}
             <span className="text-white">skills</span>
           </div>
-          <div className="mt-6 text-center text-2xl text-zinc-400 max-md:max-w-full">
+          <div className="mt-6 px-2 text-center text-2xl text-zinc-400 max-md:max-w-full">
             We help you develop a detailed and structured plan that will help to
             systematically master the topic being studied without missing
             anything important.
           </div>
-          <div className="mt-5 flex justify-center space-x-2">
+          <div className="mt-5 flex justify-center space-x-2 px-2">
             <input
               className="w-fit max-w-[335px] grow items-start justify-center rounded-xl border border-solid border-zinc-500 bg-zinc-50 px-6 py-3 text-zinc-500 max-md:px-5"
               id="learn"
@@ -81,7 +81,7 @@ export default function HomePage() {
               autoCorrect="off"
             />
             <button
-              className="justify-center rounded-xl bg-blue-600 px-6 py-3 text-center font-medium text-white shadow-sm max-md:px-5"
+              className="justify-center rounded-xl bg-blue-600 px-6 py-3 text-center text-xs font-medium text-white shadow-sm max-md:px-5 md:text-sm"
               onClick={handleRoadmapNavigate}
             >
               Create the map
@@ -110,7 +110,7 @@ export default function HomePage() {
           ))}
         </Marquee>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:mt-6 md:grid-cols-3 lg:grid-cols-4">
           <RoadmapCard
             imageSrc="https://i.imgur.com/qhC7y3a.png"
             className="bg-gradient-to-b from-violet-500 to-violet-800"

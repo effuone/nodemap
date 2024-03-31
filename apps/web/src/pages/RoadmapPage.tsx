@@ -1,11 +1,10 @@
 import MainNode from "@/components/mainNode";
 import MainPathEdge from "@/components/mainPathEdge";
+import { Button } from "@/components/ui/button";
 import Layout from "@/layout/layout";
 import { applyCommonProperties, constructMainPathEdges } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import ReactFlow, {
-  Background,
-  BackgroundVariant,
   Controls,
   Node,
   Position,
@@ -14,70 +13,46 @@ import ReactFlow, {
   useNodesState,
 } from "reactflow";
 import "reactflow/dist/style.css";
-// import { io } from "socket.io-client";
+import { io } from "socket.io-client";
 import { applyEdgeChanges } from "reactflow";
-import ChildNode from "@/components/childNode";
-import ChildPathEdge from "@/components/childPathEdge";
+import DialogCustom from "@/components/dialog-custom";
 
 type GPTNode = {
   title?: string;
   details?: string[];
 };
 
-const nodeTypes = { mainNode: MainNode, childNode: ChildNode };
-const edgeTypes = { mainPathEdge: MainPathEdge, childPathEdge: ChildPathEdge };
+const nodeTypes = { mainNode: MainNode };
+const edgeTypes = { mainPathEdge: MainPathEdge };
 
-const nodesInit = [
-  {
-    id: '1',
-    position: { x: 0, y: 0 },
-    sourcePosition: Position.Bottom,
-    targetPosition: Position.Top,
-    type: "mainNode",
-    data: { label: "Internet" },
-  },
-  {
-    id: '2',
-    position: { x: 0, y: 200 },
-    sourcePosition: Position.Bottom,
-    targetPosition: Position.Top,
-    type: "mainNode",
-    data: { label: "HTML" },
-  },
-  {
-    id: '2-1',
-    position: { x: 300, y: 0 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    type: "childNode",
-    parentNode: '2',
-    extent: 'parent',
-    data: { label: "<Body> tag" },
-  },
-  {
-    id: '2-2',
-    position: { x: 300, y: 100},
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    type: "childNode",
-    parentNode: '2',
-    extent: 'parent',
-    data: { label: "<Body> tag" },
-  },
-  {
-    id: '3',
-    position: { x: 0, y: 400 },
-    sourcePosition: Position.Bottom,
-    targetPosition: Position.Top,
-    type: "mainNode",
-    data: { label: "CSS" },
-  },
-];
-
-const edgesInit = [{ id: '1-2', source: '1', target: '2', type: "mainPathEdge",}, { id: '2-21', source: '2', target: '2-1',  sourceHandle: "2", type: "childPathEdge"}, { id: '2-3', type:"mainPathEdge", source: '2', target: '3',}];
-
+const exampleDialogProps: any = {
+  title: "HTML",
+  info: "HyperText Markup Language or HTML is the standard markup language for documents designed to be displayed in a web browser. It defines the content and structure of web content.",
+  links: [
+    {
+      title: "W3Schools: Introduction to HTML",
+      link: "https://www.w3schools.com/",
+    },
+    {
+      title: "MDN Web Docs: HTML",
+      link: "https://developer.mozilla.org/en-US/docs/Web/HTML",
+    },
+    {
+      title: "GeeksforGeeks: HTML Tutorial",
+      link: "https://www.geeksforgeeks.org/html-tutorials/",
+    },
+  ],
+};
 
 const RoadmapPage = () => {
+  // MODAL DIALOG CODE STARTS HERE
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpen = () => setIsModalOpen(true);
+  const handleClose = () => setIsModalOpen(false);
+
+  // MODAL DIALOG EXAMPLE CODE ENDS HERE
+
   const [nodes, setNodes, onNodesChange] = useNodesState(
     applyCommonProperties([
       {
@@ -86,13 +61,7 @@ const RoadmapPage = () => {
         targetPosition: Position.Top,
         data: { label: "Internet" },
       },
-      {
-        position: { x: 0, y: 200 },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
-        data: { label: "HTML" },
-      },
-    ])
+    ]),
   );
 
   const [newNode, setNewNode] = useState<GPTNode>();
@@ -103,7 +72,7 @@ const RoadmapPage = () => {
     (changes: any) => {
       setEdges((oldEdges) => applyEdgeChanges(changes, oldEdges));
     },
-    [setEdges]
+    [setEdges],
   );
 
   const userPrompt = "Create a roadmap for becoming full-stack engineer";
@@ -135,51 +104,70 @@ const RoadmapPage = () => {
     setEdges(constructMainPathEdges(nodes));
   }, [nodes]);
 
-  // const startStreaming = () => {
-  //   const socket = io("http://localhost:7070");
+  const startStreaming = () => {
+    const socket = io("http://localhost:7070");
 
-  //   socket.on("connect", () => {
-  //     console.log("Socket connected");
-  //     socket.emit("createRoadmap", userPrompt);
-  //   });
+    socket.on("connect", () => {
+      console.log("Socket connected");
+      socket.emit("createRoadmap", userPrompt);
+    });
 
-  //   socket.on("streamData", (data: GPTNode) => {
-  //     setNewNode(data);
-  //   });
+    socket.on("streamData", (data: GPTNode) => {
+      setNewNode(data);
+    });
 
-  //   socket.on("disconnect", () => {
-  //     console.log("Socket disconnected");
-  //   });
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
 
-  //   socket.on("connect_error", (error) => {
-  //     console.error("Connection error:", error);
-  //   });
-  // };
+    socket.on("connect_error", (error) => {
+      console.error("Connection error:", error);
+    });
+  };
 
   const onConnect = useCallback(
     (connection: any) => setEdges((eds) => addEdge(connection, eds)),
-    [setEdges]
+    [setEdges],
   );
-  
-  return (
-    <div style={{ width: "100vw", height: "100vh" }}>
-      <Layout>
-        <ReactFlow
-          nodeTypes={nodeTypes}
-          fitView
-          edgeTypes={edgeTypes}
-          nodes={nodesInit}
-          edges={edgesInit}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-        >
-          <Controls />
-          <Background style={{backgroundColor: "#282828"}} color="#3E3E3E" variant={'dots' as BackgroundVariant} gap={12} size={2} /> 
 
-        </ReactFlow>
-      </Layout>
-    </div>
+  return (
+    <>
+      <div style={{ width: "100vw", height: "100vh" }}>
+        <Layout>
+          <Button
+            onClick={startStreaming}
+            className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+          >
+            Start Streaming
+          </Button>
+          <Button
+            onClick={handleOpen}
+            className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+          >
+            Open Drawer
+          </Button>
+          <ReactFlow
+            nodeTypes={nodeTypes}
+            fitView
+            edgeTypes={edgeTypes}
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+          >
+            <Controls />
+          </ReactFlow>
+        </Layout>
+      </div>
+      <DialogCustom
+        info={exampleDialogProps.info}
+        links={exampleDialogProps.links}
+        title={exampleDialogProps.title}
+        isOpen={isModalOpen}
+        onClose={handleClose}
+      />
+    </>
   );
 };
 export default RoadmapPage;
