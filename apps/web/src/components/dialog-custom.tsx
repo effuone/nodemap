@@ -1,5 +1,6 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import SearchLinks from "@/api/getBrowserData";
 
 type Link = {
   title: string;
@@ -11,14 +12,26 @@ export default function DialogCustom({
   onClose,
   title,
   info,
-  links,
+  // links,
 }: {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   info: string;
-  links: Link[];
+  // links: Link[];
 }) {
+
+  const [links, setLinks] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchLink = async () => {
+      const response = await SearchLinks(title);
+      setLinks(response);
+    }
+    fetchLink();
+  },[])
+
+
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
@@ -56,7 +69,7 @@ export default function DialogCustom({
                   <hr className="my-3 border-[#373737]" />
                   <div>Links</div>
                   <div className="mt-4 text-base font-light underline">
-                    {links.map((link, index) => (
+                    {links.slice(0,5).map((link, index) => (
                       <Fragment key={index}>
                         <a
                           href={link.link}
