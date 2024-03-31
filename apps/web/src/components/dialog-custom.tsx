@@ -12,26 +12,14 @@ export default function DialogCustom({
   onClose,
   title,
   info,
-  // links,
+  links,
 }: {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   info: string;
-  // links: Link[];
+  links: Link[];
 }) {
-
-  const [links, setLinks] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchLink = async () => {
-      const response = await SearchLinks(title);
-      setLinks(response);
-    }
-    fetchLink();
-  },[])
-
-
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
@@ -69,18 +57,20 @@ export default function DialogCustom({
                   <hr className="my-3 border-[#373737]" />
                   <div>Links</div>
                   <div className="mt-4 text-base font-light underline">
-                    {links.slice(0,5).map((link, index) => (
-                      <Fragment key={index}>
-                        <a
-                          href={link.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {link.title}
-                        </a>
-                        {index < links.length - 1 ? <br /> : null}
-                      </Fragment>
-                    ))}
+                    {links &&
+                      Array.isArray(links) &&
+                      links.slice(0, 5).map((link, index) => (
+                        <Fragment key={index}>
+                          <a
+                            href={link.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {link.title}
+                          </a>
+                          {index < links.length - 1 ? <br /> : null}
+                        </Fragment>
+                      ))}
                   </div>
                 </div>
               </Dialog.Panel>
