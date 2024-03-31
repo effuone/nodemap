@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { BaseEdge, getStraightPath } from 'reactflow';
+import { BaseEdge, getBezierPath, getStraightPath } from 'reactflow';
 
 interface ChildPathEdgeProps {
   id: string;
@@ -16,7 +16,7 @@ const ChildPathEdge: FC<ChildPathEdgeProps> = ({
   targetX,
   targetY,
 }) => {
-  const [edgePath] = getStraightPath({
+  const [edgePath] = getBezierPath({
     sourceX,
     sourceY,
     targetX,

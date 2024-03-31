@@ -5,19 +5,22 @@ interface MainNodeProps extends NodeProps {
   data: {
     label: string;
   };
+  childNodePosition?: Position;
 }
 
 const MainNode: FC<MainNodeProps> = ({
   data,
-  sourcePosition = Position.Left,
-  targetPosition = Position.Right,
+  sourcePosition = Position.Top,
+  targetPosition = Position.Right,  
+  childNodePosition = Position.Right,
 }) => {
   return (
-    <div className="w-[150px] min-h-[70px] px-4 py-2 border-[2px] rounded-md border-black bg-yellow-300 ">
-      <div className="text-center">{data.label}</div>
-
-      <Handle type="target" position={targetPosition} className="bg-black" />
-      <Handle type="source" position={sourcePosition} className="bg-black" />
+    <div className='min-w-[150px] min-h-[50px] px-4 py-4 flex justify-center items-center rounded-[8px] bg-white'>
+      <div className='text-center text-[17px] font-semibold'>{data.label}</div>
+      <Handle type='source' position={sourcePosition} className='' id='1' /> {/* откуда он отдает */}
+      <Handle type='target' position={targetPosition} className='' /> {/* откуда ему приходить */}
+      
+      <Handle type='source' position={childNodePosition} className='' id='2' /> {/* откуда он с child connect */}
     </div>
   );
 };

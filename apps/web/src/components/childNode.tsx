@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { Handle, NodeProps, Position } from "reactflow";
+import { FC } from 'react';
+import { Handle, NodeProps, Position } from 'reactflow';
 
 interface childNodeProps extends NodeProps {
   data: {
@@ -9,14 +9,15 @@ interface childNodeProps extends NodeProps {
 
 const ChildNode: FC<childNodeProps> = ({
   data,
-  sourcePosition = Position.Left,
-  targetPosition = Position.Right,
+  sourcePosition = Position.Right,
+  targetPosition = Position.Left,  
 }) => {
   return (
-    <div className=" bg-[#282828] rounded-[8px] border-[1px] border-[#474747] px-4 py-2 ">
+
+    <div className=" min-w-[150px] min-h-[50px] px-4 py-4 flex justify-center items-center rounded-[8px] border-[1px] border-[#474747] bg-[#282828] ">
       <div className="text-center text-white text-[17px]">{data.label}</div>
-      <Handle type="target" position={targetPosition} className="bg-black hidden" />
-      <Handle type="source" position={sourcePosition} className="bg-black hidden" />
+      <Handle type="target" position={targetPosition} className="bg-black " />
+      <Handle type="source" position={sourcePosition} className="bg-black " />
     </div>
   );
 };
