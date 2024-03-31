@@ -1,14 +1,14 @@
-import { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC } from "react";
 import {
   InformationCircleIcon,
   ExclamationCircleIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
-} from '@heroicons/react/24/solid';
-import { Alert, AlertDescription, AlertTitle, AlertType } from './ui/alert';
-import { XIcon } from 'lucide-react';
-import { Progress } from './ui/progress';
-import { cn } from '@/lib/utils';
+} from "@heroicons/react/24/solid";
+import { Alert, AlertDescription, AlertTitle, AlertType } from "./ui/alert";
+import { XIcon } from "lucide-react";
+import { Progress } from "./ui/progress";
+import { cn } from "@/lib/utils";
 
 interface AlertProgressProps {
   alertType: AlertType;
@@ -17,18 +17,18 @@ interface AlertProgressProps {
 
 const AlertProgress: FC<AlertProgressProps> = ({ alertType, progress }) => {
   switch (alertType) {
-    case 'success':
+    case "success":
       return <Progress value={progress} color="bg-foreground dark:bg-white" />;
-    case 'error':
+    case "error":
       return (
         <Progress
           value={progress}
           color="bg-red-700 text-red-700 dark:bg-red-600"
         />
       );
-    case 'warning':
+    case "warning":
       return <Progress value={progress} color="bg-yellow-600" />;
-    case 'info':
+    case "info":
       return <Progress value={progress} color="bg-blue-600 dark:bg-blue-400" />;
   }
 };
@@ -48,7 +48,7 @@ const AlertMessage: FC<AlertMessageComponentProps> = ({
   alertType,
   onClose,
   duration,
-  className = '',
+  className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [progress, setProgress] = useState(100);
@@ -91,13 +91,13 @@ const AlertMessage: FC<AlertMessageComponentProps> = ({
   const IconComponent = icons[alertType];
 
   const alertClasses = cn(
-    'fixed top-4 left-1/2 transform -translate-x-1/2 max-w-lg w-full', // default classes
-    className // additional classes
+    "fixed top-4 left-1/2 transform -translate-x-1/2 max-w-lg w-full", // default classes
+    className, // additional classes
   );
 
   return (
     <Alert variant={alertType} className={alertClasses}>
-      <div className="flex justify-between mb-2">
+      <div className="mb-2 flex justify-between">
         <div className="flex items-center">
           <IconComponent className="h-6 w-6" />
           <div className="ml-3">
