@@ -1,14 +1,14 @@
-import { AuthProvidingLayout } from "./lib/auth/auth.layout";
-import { useAuth } from "./lib/hooks/useAuth";
+import { AuthProvidingLayout } from './lib/auth/auth.layout';
+import { useAuth } from './lib/hooks/useAuth';
 import {
   Navigate,
   Route,
   createBrowserRouter,
   createRoutesFromElements,
-} from "react-router-dom";
-import AuthPage from "./pages/AuthPage";
-import RoadmapPage from "./pages/RoadmapPage";
-import HomePage from "./pages/HomePage";
+} from 'react-router-dom';
+import AuthPage from './pages/AuthPage';
+import HomePage from './pages/HomePage';
+import RoadmapPage from './pages/RoadmapPage';
 
 const DefaultRoute = () => {
   const user = useAuth()?.user;
@@ -24,10 +24,10 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<AuthProvidingLayout />}>
       <Route path="/" element={<HomePage />} />
-      <Route path={"/auth"} element={<AuthPage />} />
-      <Route path={"/roadmap"} element={<RoadmapPage />} />
-    </Route>,
-  ),
+      <Route path={'/auth'} element={<AuthPage />} />
+      <Route path={'/roadmap'} element={<RoadmapPage />} />
+    </Route>
+  )
 );
 
 export default router;

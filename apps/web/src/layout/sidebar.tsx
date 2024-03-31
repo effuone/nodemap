@@ -1,9 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-
-// Import necessary libraries and components
-
-export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
+export default function Sidebar({ sidebarOpen, setSidebarOpen, onCreateMapClick }: any) {
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
   const sidebar = useRef(null);
@@ -74,14 +71,15 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
                 src="https://i.imgur.com/HFsYEnm.png"
                 className="z-10 mt-0 aspect-[1.47] w-32 max-w-full self-center"
               />
-              <button
-                className={clsx(
-                  sidebarExpanded ? "hidden" : "block",
-                  "justify-center rounded bg-white px-12 py-1 text-[#161616]",
-                )}
-              >
-                Create a map
-              </button>
+              {/*<button*/}
+              {/*    className={clsx(*/}
+              {/*        sidebarExpanded ? "hidden" : "block",*/}
+              {/*        "justify-center rounded bg-white px-12 py-1 text-[#161616]",*/}
+              {/*    )}*/}
+              {/*    onClick={onCreateMapClick}*/}
+              {/*>*/}
+              {/*  Create a map*/}
+              {/*</button>*/}
             </div>
           </div>
           <hr className="my-3 border-[#373737]" />
@@ -112,17 +110,17 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
               {sidebarExpanded ? (
                 <div className="p-2">Br</div>
               ) : (
-                <div>Brawl Stars</div>
+                <div>Baker</div>
               )}
               {sidebarExpanded ? (
                 <div className="p-2">Ba</div>
               ) : (
-                <div className="mt-8">Bakery</div>
+                <div className="mt-8">Gardener</div>
               )}
               {sidebarExpanded ? (
-                <div className="p-2">Po</div>
+                <div className="p-2">CS</div>
               ) : (
-                <div className="mt-8">Pokemon Go</div>
+                <div className="mt-8">CSGO PLayer</div>
               )}
               {sidebarExpanded ? (
                 <div className="p-2">Sk</div>
@@ -140,3 +138,4 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
     </>
   );
 }
+
