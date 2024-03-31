@@ -18,6 +18,7 @@ import { io } from 'socket.io-client';
 import { applyEdgeChanges } from 'reactflow';
 import ChildNode from '@/components/childNode';
 import ChildPathEdge from '@/components/childPathEdge';
+import DialogGenerate from "@/components/generate-dialog.tsx";
 
 // Define the steps for the x position values
 const xSteps = [350, 400, 600, 800];
@@ -53,9 +54,15 @@ let leftSum = 0;
 let rightSum = -200;
 
 const RoadmapPage = () => {
+  const [userPrompt, setUserPrompt] = useState(''); // For storing user input
+  const [hideButton, setHideButton] = useState(false);
+  const handleInputChange = (e) => setUserPrompt(e.target.value);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+
   const handleOpen = () => setIsModalOpen(true);
+  const handleClose = () => setIsModalOpen(false);
 
   const [newNode, setNewNode] = useState<GPTNode>();
 
@@ -179,9 +186,10 @@ const RoadmapPage = () => {
     [setEdges]
   );
 
-  const userPrompt = 'Create a roadmap for becoming full-stack engineer';
 
   const startStreaming = () => {
+    console.log('Starting streaming');
+    setHideButton(true);
     const socket = io('http://localhost:7070');
 
     socket.on('connect', () => {
@@ -204,20 +212,8 @@ const RoadmapPage = () => {
 
   return (
     <>
-      <div style={{ width: '100vw', height: '100vh' }}>
+      <div style={{ width: '100vw', height: '100vh', position: "relative" }}>
         <Layout>
-          <Button
-            onClick={startStreaming}
-            className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-          >
-            Start Streaming
-          </Button>
-          <Button
-            onClick={handleOpen}
-            className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-          >
-            Open Drawer
-          </Button>
           <ReactFlow
             nodeTypes={nodeTypes}
             fitView
@@ -238,6 +234,21 @@ const RoadmapPage = () => {
           </ReactFlow>
         </Layout>
       </div>
+      {!hideButton && (
+          <Button
+              onClick={handleOpen} // Triggers the modal to open
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+          >
+            Start Generating
+          </Button>
+      )}
+      <DialogGenerate
+          isOpen={isModalOpen}
+          onClose={handleClose}
+          inputValue={userPrompt}
+          onInputChange={handleInputChange}
+          onSubmit={startStreaming}
+      />
     </>
   );
 };
