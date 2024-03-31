@@ -72,8 +72,11 @@ const RoadmapPage = () => {
       return [...currentNodes, newNodeObject];
     });
 
-    setEdges(constructMainPathEdges(nodes));
   }, [newNode]);
+
+  useEffect(() => {
+    setEdges(constructMainPathEdges(nodes));
+  }, [nodes])
 
   const startStreaming = () => {
     const socket = io('http://localhost:7070');
