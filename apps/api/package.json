@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "heroku-postbuild": "npx prisma migrate dev && yarn build:production",
+    "heroku-postbuild": "npx prisma db push && yarn build:production",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
