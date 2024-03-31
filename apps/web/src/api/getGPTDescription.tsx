@@ -9,7 +9,7 @@ async function getGPTDescription(promptText: string) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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'
+            'Authorization': `Bearer ${import.meta.env.VITE_OPEN_AI_KEY}`
         },
         body: JSON.stringify({
             model: "gpt-3.5-turbo",     
