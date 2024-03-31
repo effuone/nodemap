@@ -19,6 +19,7 @@ import { applyEdgeChanges } from 'reactflow';
 import ChildNode from '@/components/childNode';
 import ChildPathEdge from '@/components/childPathEdge';
 import DialogGenerate from '@/components/generate-dialog.tsx';
+import { BACKEND_URL } from '@/services';
 
 // Define the steps for the x position values
 const xSteps = [350, 400, 600, 800];
@@ -188,7 +189,7 @@ const RoadmapPage = () => {
   const startStreaming = () => {
     console.log('Starting streaming');
     setHideButton(true);
-    const socket = io('http://localhost:7070');
+    const socket = io(BACKEND_URL);
 
     socket.on('connect', () => {
       console.log('Socket connected');
