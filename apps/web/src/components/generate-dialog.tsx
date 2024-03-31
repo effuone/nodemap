@@ -40,6 +40,7 @@ export default function DialogGenerate({
                     onSubmit();
                     onClose();
                   }}
+                  className='flex justify-between w-full pr-4'
                 >
                   <input
                     type="text"
