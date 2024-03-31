@@ -71,15 +71,15 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, onCreateMapClick 
                 src="https://i.imgur.com/HFsYEnm.png"
                 className="z-10 mt-0 aspect-[1.47] w-32 max-w-full self-center"
               />
-              <button
-                  className={clsx(
-                      sidebarExpanded ? "hidden" : "block",
-                      "justify-center rounded bg-white px-12 py-1 text-[#161616]",
-                  )}
-                  onClick={onCreateMapClick}
-              >
-                Create a map
-              </button>
+              {/*<button*/}
+              {/*    className={clsx(*/}
+              {/*        sidebarExpanded ? "hidden" : "block",*/}
+              {/*        "justify-center rounded bg-white px-12 py-1 text-[#161616]",*/}
+              {/*    )}*/}
+              {/*    onClick={onCreateMapClick}*/}
+              {/*>*/}
+              {/*  Create a map*/}
+              {/*</button>*/}
             </div>
           </div>
           <hr className="my-3 border-[#373737]" />
