@@ -1,15 +1,29 @@
 // Define the function to send a request to the GPT API
-async function getGPTDescription(promptText) {
-    const endpoint = 'https://api.openai.com/v1/engines/davinci/completions';
+async function getGPTDescription(promptText: string) {
+
+    const updTitle = "Generate short description for this topic: " + promptText;
+    
+    const endpoint = 'https://api.openai.com/v1/chat/completions';
 
     const requestOptions = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${import.meta.env.VITE_OPEN_AI_KEY}`
+            'Authorization': 'Bearer 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'
         },
         body: JSON.stringify({
-            prompt: promptText,
+            model: "gpt-3.5-turbo",     
+            // message: updTitle,
+            "messages": [
+                {
+                  "role": "system",
+                  "content": "You are a helpful assistant."
+                },
+                {
+                  "role": "user",
+                  "content": updTitle
+                }
+              ],
             max_tokens: 200,
             temperature: 0.7 
         })
