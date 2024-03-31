@@ -19,6 +19,18 @@ import { applyEdgeChanges } from 'reactflow';
 import ChildNode from '@/components/childNode';
 import ChildPathEdge from '@/components/childPathEdge';
 
+// Define the steps for the x position values
+const xSteps = [350, 400, 600, 800];
+// Variable to keep track of the current step index
+let currentStepIndex = 0;
+
+// Function to get the next x position value and update the step index
+function getNextXStep() {
+  const step = xSteps[currentStepIndex];
+  currentStepIndex = (currentStepIndex + 1) % xSteps.length; // Cycle through the steps
+  return step;
+}
+
 type GPTNode = {
   title: string;
   details: string[];
@@ -99,11 +111,12 @@ const RoadmapPage = () => {
       id: groupNodeIndex,
       type: 'group',
       position: {
-        x: nodeId % 2 != 0 ? -250 : 250,
+        x: nodeId % 2 != 0 ? -1 * getNextXStep() : getNextXStep(),
         y: nodeId % 2 != 0 ? rightSum : leftSum,
       },
       style: {
         width: 150,
+        background: 'none',
         height: groupSize,
         border: 'none',
       },
@@ -124,19 +137,23 @@ const RoadmapPage = () => {
           y: incrementalStep,
         },
         data: { label: detail },
-        sourcePosition: nodeId % 2 !== 0 ? Position.Left : Position.Right,
-        targetPosition: Position.Bottom,
+        sourcePosition: nodeId % 2 !== 0 ? Position.Right : Position.Left,
+        targetPosition: nodeId % 2 !== 0 ? Position.Left : Position.Right,
         //@ts-ignore
         parent: 'extent',
         parentNode: groupNodeIndex,
       });
-      incrementalStep = incrementalStep + 100;
+      incrementalStep = incrementalStep + 80;
 
       // Connect the main node to this detail node
       addEdge({
         id: `node_${nodeId}_to_child_${childId}`,
         source: mainNodeId,
         target: detailNodeId,
+        // Use 'bottom' as the source handle for connections from main to child nodes
+        sourceHandle: nodeId % 2 !== 0 ? 'left' : 'right',
+        // Choose the target handle based on the child's position (left or right of the main node)
+        targetHandle: nodeId % 2 == 0 ? 'left' : 'right', // Assuming odd nodeId means left, even means right
         type: 'childPathEdge',
       });
 

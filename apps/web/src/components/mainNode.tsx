@@ -5,7 +5,6 @@ interface MainNodeProps extends NodeProps {
   data: {
     label: string;
   };
-  childNodePosition?: Position;
 }
 
 const MainNode: FC<MainNodeProps> = ({
@@ -18,11 +17,23 @@ const MainNode: FC<MainNodeProps> = ({
       <div className="text-center text-[17px] font-semibold text-black">
         {data.label}
       </div>
-      <Handle type="source" position={sourcePosition} className="" id="1" />{' '}
-      {/* откуда он отдает */}
-      <Handle type="target" position={targetPosition} className="" />{' '}
-      {/* откуда ему приходить */}
-      {/* <Handle type='source' position={childNodePosition} className='' id='2' /> откуда он с child connect */}
+      {/* Source handles */}
+      <Handle type="target" position={Position.Top} id="top" />
+      <Handle type="source" position={Position.Bottom} id="bottom" />
+
+      {/* Handles for connecting child nodes */}
+      <Handle
+        type="source"
+        position={Position.Left}
+        id="left"
+        className="handle-left"
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="right"
+        className="handle-right"
+      />
     </div>
   );
 };
