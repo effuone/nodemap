@@ -29,33 +29,7 @@ type GPTNode = {
 const nodeTypes = { mainNode: MainNode, childNode: ChildNode };
 const edgeTypes = { mainPathEdge: MainPathEdge, childPathEdge: ChildPathEdge };
 
-const exampleDialogProps: any = {
-  title: "HTML",
-  info: "HyperText Markup Language or HTML is the standard markup language for documents designed to be displayed in a web browser. It defines the content and structure of web content.",
-  links: [
-    {
-      title: "W3Schools: Introduction to HTML",
-      link: "https://www.w3schools.com/",
-    },
-    {
-      title: "MDN Web Docs: HTML",
-      link: "https://developer.mozilla.org/en-US/docs/Web/HTML",
-    },
-    {
-      title: "GeeksforGeeks: HTML Tutorial",
-      link: "https://www.geeksforgeeks.org/html-tutorials/",
-    },
-  ],
-};
-
 const RoadmapPage = () => {
-  // MODAL DIALOG CODE STARTS HERE
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpen = () => setIsModalOpen(true);
-  const handleClose = () => setIsModalOpen(false);
-
-  // MODAL DIALOG EXAMPLE CODE ENDS HERE
 
   const [nodes, setNodes, onNodesChange] = useNodesState(
     applyCommonProperties([
@@ -144,12 +118,6 @@ const RoadmapPage = () => {
           >
             Start Streaming
           </Button>
-          <Button
-            onClick={handleOpen}
-            className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-          >
-            Open Drawer
-          </Button>
           <ReactFlow
             nodeTypes={nodeTypes}
             fitView
@@ -165,12 +133,6 @@ const RoadmapPage = () => {
           </ReactFlow>
         </Layout>
       </div>
-      <DialogCustom
-        info={exampleDialogProps.info}
-        title={exampleDialogProps.title}
-        isOpen={isModalOpen}
-        onClose={handleClose}
-      />
     </>
   );
 };
