@@ -167,7 +167,6 @@ const RoadmapPage = () => {
       </div>
       <DialogCustom
         info={exampleDialogProps.info}
-        links={exampleDialogProps.links}
         title={exampleDialogProps.title}
         isOpen={isModalOpen}
         onClose={handleClose}
