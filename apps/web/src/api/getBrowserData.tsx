@@ -1,26 +1,17 @@
 import axios from "axios";
 
-async function fetchAndStoreBraveSearchResults() {
-  try {
-    const response = await axios.post('https://api.search.brave.com/res/v1/web/search', {
-    params: {
-        q: 'brave search'
-    },
-      headers: {
-        'Accept': 'application/json',
-        'Accept-Encoding': 'gzip',
-        'X-Subscription-Token': import.meta.env.BRAVE_SEARCH_API_KEY,
-      }
-    });
+const SearchLinks = async (question: string) => {
 
-    // const searchData = response.data;
+  const key = import.meta.env.VITE_GOOGLE_SEARCH_API_KEY;
+  const browserEngineId = import.meta.env.VITE_BROWSER_ENGINE_ID;
+  const url = `https://www.googleapis.com/customsearch/v1?key=${key}&cx=${browserEngineId}&q=${question}`;
 
-    console.log(response);
-
+  try{
+    const response = await axios.get(url)
+    return response.data.items
   } catch (error) {
-    console.log(error)
-    // console.error('Error fetching Brave search results:', error);
+    console.log(error);
   }
 }
 
-export default fetchAndStoreBraveSearchResults;
+export default SearchLinks;
