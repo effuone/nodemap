@@ -2,13 +2,13 @@ import { Position } from "reactflow";
 
 type gptNodeType = {
   title: string;
-  x: string;
-  y: string;
+  x: string | number;
+  y: string | number; 
   sourcePosition: "right" | "left" | "top" | "bottom";
   targetPosition: "right" | "left" | "top" | "bottom";
 };
 
-type NodeType = {
+export type NodeType = {
   position: {
     x: number;
     y: number;

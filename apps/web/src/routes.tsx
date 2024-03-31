@@ -7,6 +7,7 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import AuthPage from './pages/AuthPage';
+import HomePage from './pages/HomePage';
 import RoadmapPage from './pages/RoadmapPage';
 
 const DefaultRoute = () => {
@@ -22,7 +23,7 @@ const DefaultRoute = () => {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<AuthProvidingLayout />}>
-      <Route path="/" element={<DefaultRoute />} />
+      <Route path="/" element={<HomePage />} />
       <Route path={'/auth'} element={<AuthPage />} />
       <Route path={'/roadmap'} element={<RoadmapPage />} />
     </Route>
