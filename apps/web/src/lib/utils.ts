@@ -33,10 +33,10 @@ export const constructMainPathEdges = (initialNodes: any[]) => {
   const edges = [];
   for (let i = 1; i < initialNodes.length; i++) {
     edges.push({
-      id: `el${i}-${i + 1}`,
+      id: `edge_${i}-${i + 1}`,
       type: 'mainPathEdge',
-      source: `${i}`,
-      target: `${i + 1}`,
+      source: `node_${i}`,
+      target: `node_${i + 1}`,
     });
   }
   return edges;
