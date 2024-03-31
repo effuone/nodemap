@@ -1,8 +1,7 @@
 import { FC } from 'react';
-import { BaseEdge, getBezierPath, EdgeProps } from 'reactflow';
+import { BaseEdge, getBezierPath, getStraightPath } from 'reactflow';
 
-// You might need to adjust the interface based on the actual props you use
-interface MainPathEdgeProps extends EdgeProps {
+interface ChildPathEdgeProps {
   id: string;
   sourceX: number;
   sourceY: number;
@@ -10,14 +9,13 @@ interface MainPathEdgeProps extends EdgeProps {
   targetY: number;
 }
 
-const MainPathEdge: FC<MainPathEdgeProps> = ({
+const ChildPathEdge: FC<ChildPathEdgeProps> = ({
   id,
   sourceX,
   sourceY,
   targetX,
   targetY,
 }) => {
-  // Use getBezierPath for a curved path
   const [edgePath] = getBezierPath({
     sourceX,
     sourceY,
@@ -29,12 +27,12 @@ const MainPathEdge: FC<MainPathEdgeProps> = ({
     <>
       <BaseEdge
         id={id}
-        path={edgePath}
+        path={edgePath}        
         style={{
-          stroke: 'white', // Edge color
-          strokeWidth: 2, // Edge thickness
+          stroke: '#616161', // Edge color
+          strokeWidth: 1, // Edge thickness
           strokeLinecap: 'round', // Edge line cap style
-          strokeDasharray: '0', // Solid line
+          strokeDasharray: '0', // Solid line; use a value like '5,5' for dashed lines
           fill: 'none', // Ensures the path is not filled
         }}
       />
@@ -42,4 +40,4 @@ const MainPathEdge: FC<MainPathEdgeProps> = ({
   );
 };
 
-export default MainPathEdge;
+export default ChildPathEdge;

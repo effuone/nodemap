@@ -9,15 +9,31 @@ interface MainNodeProps extends NodeProps {
 
 const MainNode: FC<MainNodeProps> = ({
   data,
-  sourcePosition = Position.Left,
+  sourcePosition = Position.Top,
   targetPosition = Position.Right,
 }) => {
   return (
-    <div className="w-[150px] min-h-[70px] px-4 py-2 border-[2px] rounded-md border-black bg-yellow-300 ">
-      <div className="text-center">{data.label}</div>
+    <div className="min-w-[150px] min-h-[50px] px-4 py-4 flex justify-center items-center rounded-[8px] bg-white">
+      <div className="text-center text-[17px] font-semibold text-black">
+        {data.label}
+      </div>
+      {/* Source handles */}
+      <Handle type="target" position={Position.Top} id="top" />
+      <Handle type="source" position={Position.Bottom} id="bottom" />
 
-      <Handle type="target" position={targetPosition} className="bg-black" />
-      <Handle type="source" position={sourcePosition} className="bg-black" />
+      {/* Handles for connecting child nodes */}
+      <Handle
+        type="source"
+        position={Position.Left}
+        id="left"
+        className="handle-left"
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="right"
+        className="handle-right"
+      />
     </div>
   );
 };
