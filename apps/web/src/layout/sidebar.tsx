@@ -83,52 +83,6 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, onCreateMapClick 
             </div>
           </div>
           <hr className="my-3 border-[#373737]" />
-          <div className="flex max-w-[215px] flex-col pb-2 text-base text-white">
-            <div className="w-full text-xl font-bold">Maps</div>
-            {sidebarExpanded ? (
-              <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/9ec5cfcd267c67eec8c0921bdcdfe2a8b3b0a1774aaef53a2004052643b2b931?"
-                className="mx-auto mt-2 aspect-square w-[18px] shrink-0 self-start fill-white "
-              />
-            ) : (
-              <input
-                type="text"
-                placeholder="Search"
-                className="mt-4 flex w-full justify-between gap-5 whitespace-nowrap rounded-md bg-white px-3 py-2 text-neutral-600"
-              />
-            )}
-            <div
-              className={clsx(
-                sidebarExpanded ? "hidden" : "block",
-                "mt-3.5 w-full items-start justify-center whitespace-nowrap rounded-md border border-solid border-neutral-700 px-3.5 py-2",
-              )}
-            >
-              Front-end
-            </div>
-            <div className="mt-6 flex w-full flex-col items-start pl-3.5 pr-20">
-              {sidebarExpanded ? (
-                <div className="p-2">Br</div>
-              ) : (
-                <div>Baker</div>
-              )}
-              {sidebarExpanded ? (
-                <div className="p-2">Ba</div>
-              ) : (
-                <div className="mt-8">Gardener</div>
-              )}
-              {sidebarExpanded ? (
-                <div className="p-2">CS</div>
-              ) : (
-                <div className="mt-8">CSGO PLayer</div>
-              )}
-              {sidebarExpanded ? (
-                <div className="p-2">Sk</div>
-              ) : (
-                <div className="mt-8">Skateboarding</div>
-              )}
-            </div>
-          </div>
         </div>
 
         <div className="mt-auto pt-3  lg:inline-flex ">
