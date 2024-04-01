@@ -21,6 +21,8 @@ import ChildPathEdge from '@/components/childPathEdge';
 import DialogGenerate from '@/components/generate-dialog.tsx';
 import DialogCustom from "@/components/dialog-custom.tsx";
 import { BACKEND_URL } from '@/services';
+import { useParams } from 'react-router-dom';
+import { list } from '@/lib/consts';
 
 // Define the steps for the x position values
 const xSteps = [350, 400, 600, 800];
@@ -56,6 +58,21 @@ let leftSum = 0;
 let rightSum = -200;
 
 const RoadmapPage = () => {
+
+  const {id} = useParams();
+
+  useEffect(() => {
+    if(id){
+
+      const item = list.find(item => item.id == id);
+      if(item){
+        setNodes(item.nodes as Node[]);
+        setEdges(item.edges);
+        setHideButton(true)
+      }
+    }
+  }, [id])
+
   const [userPrompt, setUserPrompt] = useState(''); // For storing user input
   const [hideButton, setHideButton] = useState(false);
   const handleInputChange = (e) => setUserPrompt(e.target.value);
