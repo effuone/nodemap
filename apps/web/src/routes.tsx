@@ -26,6 +26,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<HomePage />} />
       <Route path={'/auth'} element={<AuthPage />} />
       <Route path={'/roadmap'} element={<RoadmapPage />} />
+      <Route path={'/roadmap/:id'} element={<RoadmapPage />} />
     </Route>
   )
 );
