@@ -1,8 +1,8 @@
-import MainNode from '@/components/mainNode';
-import MainPathEdge from '@/components/mainPathEdge';
-import { Button } from '@/components/ui/button';
-import Layout from '@/layout/layout';
-import { useCallback, useEffect, useState } from 'react';
+import MainNode from "@/components/mainNode";
+import MainPathEdge from "@/components/mainPathEdge";
+import { Button } from "@/components/ui/button";
+import Layout from "@/layout/layout";
+import { useCallback, useEffect, useState } from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -12,15 +12,15 @@ import ReactFlow, {
   Position,
   useEdgesState,
   useNodesState,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
-import { io } from 'socket.io-client';
-import { applyEdgeChanges } from 'reactflow';
-import ChildNode from '@/components/childNode';
-import ChildPathEdge from '@/components/childPathEdge';
-import DialogGenerate from '@/components/generate-dialog.tsx';
+} from "reactflow";
+import "reactflow/dist/style.css";
+import { io } from "socket.io-client";
+import { applyEdgeChanges } from "reactflow";
+import ChildNode from "@/components/childNode";
+import ChildPathEdge from "@/components/childPathEdge";
+import DialogGenerate from "@/components/generate-dialog.tsx";
 import DialogCustom from "@/components/dialog-custom.tsx";
-import { BACKEND_URL } from '@/services';
+import { BACKEND_URL } from "@/services";
 
 // Define the steps for the x position values
 const xSteps = [350, 400, 600, 800];
@@ -56,18 +56,18 @@ let leftSum = 0;
 let rightSum = -200;
 
 const RoadmapPage = () => {
-  const [userPrompt, setUserPrompt] = useState(''); // For storing user input
+  const [userPrompt, setUserPrompt] = useState(""); // For storing user input
   const [hideButton, setHideButton] = useState(false);
   const handleInputChange = (e) => setUserPrompt(e.target.value);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpen = () => setIsModalOpen(true);
-  const handleClose = () => setIsModalOpen(false);
+  const handleOpen = () => {setIsModalOpen(true); setHideButton(true)};
+  const handleClose = () => {setIsModalOpen(false); setHideButton(false)};
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const handleDialogClose = () => setIsDialogOpen(false);
-    const handleDialogOpen = () => setIsDialogOpen(true);
+  const handleDialogClose = () => setIsDialogOpen(false);
+  const handleDialogOpen = () => setIsDialogOpen(true);
 
   const [newNode, setNewNode] = useState<GPTNode>();
 
@@ -76,7 +76,6 @@ const RoadmapPage = () => {
   const [edges, setEdges] = useEdgesState([]);
 
   const [clickedNode, setClickedNode] = useState(null);
-
 
   const addNode = (newNode: Node) => {
     setNodes((oldNodes) => [...oldNodes, newNode]);
@@ -87,7 +86,7 @@ const RoadmapPage = () => {
   };
 
   const getMainNodes = () => {
-    return nodes.filter((node) => node.type === 'mainNode');
+    return nodes.filter((node) => node.type === "mainNode");
   };
 
   useEffect(() => {
@@ -96,7 +95,7 @@ const RoadmapPage = () => {
     }
     const mainNodes = getMainNodes();
     const nodeId = mainNodes.length !== 0 ? mainNodes.length + 1 : 1;
-    console.log('nodeId', nodeId);
+    console.log("nodeId", nodeId);
     const mainNodeId = `node_${nodeId}`;
     yPosMainNode += yGapMainNode;
 
@@ -116,7 +115,7 @@ const RoadmapPage = () => {
     addNode({
       id: mainNodeId,
       position: { x: 0, y: yPosMainNode },
-      type: 'mainNode',
+      type: "mainNode",
       sourcePosition: Position.Bottom,
       targetPosition: Position.Top,
       data: { label: newNode.title },
@@ -124,18 +123,18 @@ const RoadmapPage = () => {
 
     addNode({
       id: groupNodeIndex,
-      type: 'group',
+      type: "group",
       position: {
         x: nodeId % 2 != 0 ? -1 * getNextXStep() : getNextXStep(),
         y: nodeId % 2 != 0 ? rightSum : leftSum,
       },
       style: {
         width: 150,
-        background: 'none',
+        background: "none",
         height: groupSize,
-        border: 'none',
+        border: "none",
       },
-      data: { label: '' },
+      data: { label: "" },
     });
 
     let incrementalStep = 0;
@@ -146,7 +145,7 @@ const RoadmapPage = () => {
       const detailNodeId = `node_${nodeId}_child_${childId}`;
       addNode({
         id: detailNodeId,
-        type: 'childNode',
+        type: "childNode",
         position: {
           x: 0,
           y: incrementalStep,
@@ -155,7 +154,7 @@ const RoadmapPage = () => {
         sourcePosition: nodeId % 2 !== 0 ? Position.Right : Position.Left,
         targetPosition: nodeId % 2 == 0 ? Position.Left : Position.Right,
         //@ts-ignore
-        parent: 'extent',
+        parent: "extent",
         parentNode: groupNodeIndex,
       });
       incrementalStep = incrementalStep + 80;
@@ -166,10 +165,10 @@ const RoadmapPage = () => {
         source: mainNodeId,
         target: detailNodeId,
         // Use 'bottom' as the source handle for connections from main to child nodes
-        sourceHandle: nodeId % 2 !== 0 ? 'left' : 'right',
+        sourceHandle: nodeId % 2 !== 0 ? "left" : "right",
         // Choose the target handle based on the child's position (left or right of the main node)
-        targetHandle: nodeId % 2 == 0 ? 'left' : 'right', // Assuming odd nodeId means left, even means right
-        type: 'childPathEdge',
+        targetHandle: nodeId % 2 == 0 ? "left" : "right", // Assuming odd nodeId means left, even means right
+        type: "childPathEdge",
       });
 
       // Update position for next detail node
@@ -182,7 +181,7 @@ const RoadmapPage = () => {
         id: `edge_node_${nodeId - 1}_to_node_${nodeId}`,
         source: `node_${nodeId - 1}`,
         target: mainNodeId,
-        type: 'mainPathEdge', // Make sure this type matches your defined edge types
+        type: "mainPathEdge", // Make sure this type matches your defined edge types
       });
     }
   }, [newNode]);
@@ -195,31 +194,31 @@ const RoadmapPage = () => {
   );
 
   const startStreaming = () => {
-    console.log('Starting streaming');
+    console.log("Starting streaming");
     setHideButton(true);
     const socket = io(BACKEND_URL);
 
-    socket.on('connect', () => {
-      console.log('Socket connected');
-      socket.emit('createRoadmap', userPrompt);
+    socket.on("connect", () => {
+      console.log("Socket connected");
+      socket.emit("createRoadmap", userPrompt);
     });
 
-    socket.on('streamData', (data: GPTNode) => {
+    socket.on("streamData", (data: GPTNode) => {
       setNewNode(data);
     });
 
-    socket.on('disconnect', () => {
-      console.log('Socket disconnected');
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected");
     });
 
-    socket.on('connect_error', (error) => {
-      console.error('Connection error:', error);
+    socket.on("connect_error", (error) => {
+      console.error("Connection error:", error);
     });
   };
 
   return (
     <>
-      <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
         <Layout>
           <ReactFlow
             nodeTypes={nodeTypes}
@@ -236,9 +235,9 @@ const RoadmapPage = () => {
             }}
           >
             <Background
-              style={{ backgroundColor: '#282828' }}
+              style={{ backgroundColor: "#282828" }}
               color="#3E3E3E"
-              variant={'dots' as BackgroundVariant}
+              variant={"dots" as BackgroundVariant}
               gap={12}
               size={2}
             />
@@ -262,8 +261,9 @@ const RoadmapPage = () => {
         onSubmit={startStreaming}
       />
       <DialogCustom
-          isOpen={isDialogOpen} onClose={handleDialogClose}
-          title={clickedNode ? clickedNode.data.label : 'Node Information'}
+        isOpen={isDialogOpen}
+        onClose={handleDialogClose}
+        title={clickedNode ? clickedNode.data.label : "Node Information"}
       />
     </>
   );
