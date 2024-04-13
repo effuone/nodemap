@@ -28,5 +28,7 @@ Nodemap is an AI-driven SaaS platform for creating visual learning paths. It all
 
 1. **Clone Repository**: `git clone https://github.com/effuone/nodemap`.
 2. **Install Dependencies**: Run `yarn install` in both API and Web directories.
-3. **Environment Configuration**: Rename `.env.example` to `.env` and update it with your development settings.
-4. **Start Application**: Run `docker-compose -f docker-compose.dev.yml up -d` to run Docker container with NGINX web server, PostgreSQL and Redis databases. Then Execute `yarn start:dev` in API directory and "yarn dev" in web directory to launch the application.
+3. **Environment Configuration**: Rename `.env.example` to `.env` in both api and web directories to update it with your development settings.
+4. **Prepare services**: Run `docker-compose -f docker-compose.dev.yml up -d` to run a Docker container with PostgreSQL and Redis databases.
+4. **Apply migrations**: Run `npx prisma db push` in API directory to apply Prisma migrations.
+5. **Start application**: Execute `yarn start:dev` in API directory and "yarn dev" in web directory to launch the application.
