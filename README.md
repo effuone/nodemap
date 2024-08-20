@@ -4,6 +4,9 @@
 
 Nodemap is an AI-driven SaaS platform for creating visual learning paths. It allows users to select a topic to generate a node-based map for study, drawing inspiration from visual representations similar to roadmap.sh.
 
+## Link to the demo
+https://www.youtube.com/watch?v=8zhhIKet7QE&t=1s
+
 ## Technical Stack
 
 ### Backend
