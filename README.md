@@ -18,7 +18,7 @@ https://www.youtube.com/watch?v=8zhhIKet7QE&t=1s
 ### Frontend
 
 - **Technologies**: React with Vite.js or Next.js
-- **Visualization**: d3.js for force-directed graph representations.
+- **Visualization**: React-Flow for force-directed graph representations.
 - **UI Components**: @shadcn/ui for customizable UI elements.
 
 ## Features
